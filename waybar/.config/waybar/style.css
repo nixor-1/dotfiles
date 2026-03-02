@@ -1,0 +1,39 @@
+window#waybar {
+    background-color: black;
+    border: none;
+}
+
+.module {
+    /* border: none; */
+    /* margin: 0; */
+    /* margin: 0px 8px; */
+    margin: 0px 14px 0px 14px;
+    background-color: transparent;
+}
+
+/* Workspaces styling */
+#workspaces button {
+    /* padding: 0 10px; */
+    background-color: transparent;
+    margin: 0;
+}
+
+#workspaces button.active {
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 1.0);
+}
+
+/* 🌙 Darker Gray for EVENLY placed modules (2nd, 4th, 6th, etc.) */
+/* The '2n' selector targets every second element */
+.modules-left > *:nth-child(2n) {
+    background-color: #4C566A; /* Example: Nord 'Polar Night' Darker Gray */
+    color: #ECEFF4; /* Light text for contrast */
+}
+
+/* ☀️ Light Gray for UNEVENLY placed modules (1st, 3rd, 5th, etc.) */
+/* The '2n + 1' selector targets every second element starting from the first */
+.modules-left > *:nth-child(2n + 1) {
+    background-color: black; /* Example: Nord 'Snow Storm' Light Gray */
+    color: white; /* Dark text for contrast */
+}

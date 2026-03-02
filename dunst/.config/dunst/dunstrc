@@ -1,0 +1,5 @@
+[global]
+    background = "#888888"
+    foreground = "#FFFFFF"
+    highlight = "#FFFFFF"
+    frame_color = "#FFFFFF"
