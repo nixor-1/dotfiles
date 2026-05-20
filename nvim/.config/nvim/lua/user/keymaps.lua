@@ -10,6 +10,12 @@ vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = "Skift til højre vindue" })
 vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = "Skift til nedre vindue" })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = "Skift til øvre vindue" })
 
+-- Ctrl + Left Click to go to source definition
+vim.keymap.set('n', '<C-LeftMouse>', '<LeftMouse><cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'Gå til definition' })
+
+-- Toggle between the current and last active file
+vim.keymap.set('n', '<leader><leader>', '<cmd>e #<CR>', { desc = 'Skift til sidste fil' })
+
 -- LSP shortcuts.
 -- Are inactive if no LSP is active.
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Gå til definition" })

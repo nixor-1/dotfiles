@@ -24,7 +24,7 @@ return {
 
     config = function()
       -- Her installerer vi selve sprogene [cite: 76, 176]
-      local parsers = { "lua", "bash", "python", "javascript", "typescript" }
+      local parsers = { "lua", "bash", "python", "javascript", "typescript", "tsx" }
       require('nvim-treesitter').install(parsers) 
     end,
   },
@@ -41,12 +41,26 @@ return {
     "williamboman/mason.nvim",
     opts = {}
   },
+  -- Automates installing servers you configure in lspconfig
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = {
+      ensure_installed = { "lua_ls", "pyright", "ts_ls" }
+    }
+  },
   {
     "neovim/nvim-lspconfig",
     config = function()
       vim.lsp.config("lua_ls", {})
       vim.lsp.config("pyright", {})
       vim.lsp.enable({ "lua_ls", "pyright" })
+      vim.lsp.config("ts_ls", {
+        -- Explicitly tells the language server to activate on plain JS, TS, and React components
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+      })
+      
+      -- Enable all three servers
+      vim.lsp.enable({ "lua_ls", "pyright", "ts_ls" })
     end,
   },
   {
@@ -61,6 +75,13 @@ return {
       "nvim-tree/nvim-web-devicons", -- optional, but recommended
     },
     lazy = false, -- neo-tree will lazily load itself
+    opts = {
+      filesystem = {
+        follow_current_file = {
+          enabled = true,          -- This finds and highlights the file you just jumped into
+        },
+      },
+    },
   },
   {
     "kdheepak/lazygit.nvim",
