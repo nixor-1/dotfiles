@@ -9,11 +9,24 @@ opt.cursorline = true       -- Marker den linje, markøren står på
 opt.scrolloff = 8           -- Hold altid 8 linjer synlige over/under markøren, når du scroller
 vim.opt.foldlevel = 99 -- Start med alle folds åbne (højt tal = ingen automatisk foldning)
 
+-- For linting.
+vim.diagnostic.config({
+  virtual_text = {
+    spacing = 4,
+    prefix = "●", -- Can be any symbol you like
+  },
+  severity_sort = true,
+  float = {
+    border = "rounded",
+    source = "always", -- This shows 'eslint_d' next to the error message
+  },
+})
+
 -- Tabs and indenting.
 opt.expandtab = true        -- Konverter tabs til mellemrum
-opt.shiftwidth = 4          -- Antal mellemrum ved indrykning
-opt.tabstop = 4             -- Hvor mange mellemrum et tab-tegn fylder
-opt.softtabstop = 4
+opt.shiftwidth = 2          -- Antal mellemrum ved indrykning
+opt.tabstop = 2             -- Hvor mange mellemrum et tab-tegn fylder
+opt.softtabstop = 2
 opt.smartindent = true      -- Gør indrykning intelligent (f.eks. efter en "if" i Python)
 
 -- Search.

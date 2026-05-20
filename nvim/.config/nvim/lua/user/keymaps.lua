@@ -1,3 +1,6 @@
+-- Keymappings module.
+local M = {}
+
 -- Leader key (space key).
 vim.g.mapleader = " "
 
@@ -39,3 +42,17 @@ vim.keymap.set('n', '<leader>e', ':Neotree focus<CR>', { silent = true, desc = "
 -- Dynamically resize windows/Neo-tree using Ctrl + arrow keys.
 vim.keymap.set('n', '<C-Right>', ':vertical resize +3<CR>', { silent = true, desc = "Gør vindue bredere" })
 vim.keymap.set('n', '<C-Left>', ':vertical resize -3<CR>', { silent = true, desc = "Gør vindue smallere" })
+
+-- For linting
+-- Show diagnostic error details under cursor
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+
+-- blink.cmp Keymappings
+M.blink = {
+  preset = "default",
+  ["<CR>"] = { "select_and_accept", "fallback" },
+  -- You can add other mappings here later if you want, like:
+  -- ["<Tab>"] = { "select_next", "fallback" },
+}
+
+return M
