@@ -25,8 +25,8 @@
         "clock#time",
         "clock#date",
         "tray",
-        "bluetooth"
-        // "custom/power"
+        "bluetooth",
+        "custom/power"
     ],
     "modules-center": [
     ],
@@ -212,15 +212,15 @@
     },
     "custom/power": {
         "format" : "⏻ ",
-		"tooltip": false,
-		"menu": "on-click",
-		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-		"menu-actions": {
-			"shutdown": "shutdown",
-			"reboot": "reboot",
-			"suspend": "systemctl suspend",
-			"hibernate": "systemctl hibernate"
-		}
+		    "tooltip": false,
+		    "menu": "on-click",
+		    "menu-file": "$HOME/.config/waybar/components/power-menu.xml", // Menu file in resources folder
+        "menu-actions": {
+            "shutdown": "systemctl poweroff",
+            "reboot": "systemctl reboot",
+            "suspend": "systemctl suspend",
+            "hibernate": "systemctl hibernate"
+        }
     },
     "bluetooth": {
     	"format": " {status}",
