@@ -218,10 +218,10 @@ hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
-hl.bind(mainMod .. " + SHIFT + right", function() hl.dsp.resizeactive("10 0") end, { repeating = true })
-hl.bind(mainMod .. " + SHIFT + left", function() hl.dsp.resizeactive("-10 0") end, { repeating = true })
-hl.bind(mainMod .. " + SHIFT + up", function() hl.dsp.resizeactive("0 -10") end, { repeating = true })
-hl.bind(mainMod .. " + SHIFT + down", function() hl.dsp.resizeactive("0 10") end, { repeating = true })
+hl.bind(mainMod .. " + SHIFT + right", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + left", hl.dsp.window.resize({ x = -10, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + up", hl.dsp.window.resize({ x = 0, y = -10, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + down", hl.dsp.window.resize({ x = 0, y = 10, relative = true }), { repeating = true })
 
 -- ==========================================
 -- 6. MULTIMEDIA & AUDIO CONTROLS
