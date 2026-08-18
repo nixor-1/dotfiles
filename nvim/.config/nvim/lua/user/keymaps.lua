@@ -30,10 +30,11 @@ vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = "Code action
 -- A protectured require (pcall) is used so that NeoVim does not crash if Telescope fails.
 local status_ok, builtin = pcall(require, "telescope.builtin")
 if status_ok then
-    vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = "Find filer" })
-    vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = "Søg i tekst (grep)" })
-    vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = "Åbne buffere" })
-    vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = "Søg i hjælp" })
+  vim.keymap.set('n', '<leader>fs', builtin.current_buffer_fuzzy_find, { desc = "Søg i nuværende fil" })
+  vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = "Find filer" })
+  vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = "Søg i tekst (grep)" })
+  vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = "Åbne buffere" })
+  vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = "Søg i hjælp" })
 end
 
 -- Neotree shortcuts.
@@ -54,5 +55,20 @@ M.blink = {
   -- You can add other mappings here later if you want, like:
   -- ["<Tab>"] = { "select_next", "fallback" },
 }
+
+-- bufferline.nvim mappings.
+vim.keymap.set("n", "gb", "<Cmd>BufferLinePick<CR>", { silent = true, desc = "Pick buffer" })
+vim.keymap.set("n", "gD", "<Cmd>BufferLinePickClose<CR>", { silent = true, desc = "Pick buffer to close" })
+for i = 1, 9 do
+  vim.keymap.set("n", "<leader>" .. i, "<Cmd>BufferLineGoToBuffer " .. i .. "<CR>",
+    { silent = true, desc = "Go to visible buffer " .. i })
+end
+vim.keymap.set("n", "<leader>$", "<Cmd>BufferLineGoToBuffer -1<CR>",
+  { silent = true, desc = "Go to last visible buffer" })
+vim.keymap.set("n", "<Tab>", "<Cmd>BufferLineCycleNext<CR>", { silent = true, desc = "Next buffer" })
+vim.keymap.set("n", "<S-Tab>", "<Cmd>BufferLineCyclePrev<CR>", { silent = true, desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>bl", "<Cmd>BufferLineMoveNext<CR>", { silent = true, desc = "Move buffer right" })
+vim.keymap.set("n", "<leader>bh", "<Cmd>BufferLineMovePrev<CR>", { silent = true, desc = "Move buffer left" })
+vim.keymap.set("n", "<leader>bc", "<Cmd>bdelete<CR>", { silent = true, desc = "Close current buffer" })
 
 return M

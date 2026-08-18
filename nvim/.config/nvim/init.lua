@@ -11,3 +11,7 @@ require("user.setup_lazynvim")
 -- Load options and keymaps.
 require("user.options")
 require("user.keymaps")
+
+-- Needed by bufferline.nvim.
+vim.opt.termguicolors = true
+require("bufferline").setup {}
