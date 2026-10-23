@@ -1,3 +1,5 @@
+local obsidian_vault = vim.fn.expand("~/Documents/Obsidian-noter")
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -118,12 +120,12 @@ return {
     version = "*",
     ft = "markdown",
     cond = function()
-      return vim.fn.isdirectory(vim.fn.expand("~/Documents/Obsidian-noter")) == 1
+      return vim.fn.isdirectory(vim.fn.expand(obsidian_vault)) == 1
     end,
     opts = {
       legacy_commands = false,
       workspaces = {
-        { name = "personal", path = "~/vaults/personal" },
+        { name = "noter", path = obsidian_vault },
       },
     },
   },
