@@ -24,13 +24,13 @@ return {
 
     config = function()
       -- Her installerer vi selve sprogene [cite: 76, 176]
-      local parsers = { "lua", "bash", "python", "javascript", "typescript", "tsx" }
+      local parsers = { "lua", "bash", "python", "javascript", "typescript", "tsx", "go", "gomod", "gosum", "gowork" }
       require('nvim-treesitter').install(parsers)
     end,
   },
   {
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
+    -- branch = "0.1.x",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local builtin = require('telescope.builtin')
@@ -45,7 +45,7 @@ return {
   {
     "williamboman/mason-lspconfig.nvim",
     opts = {
-      ensure_installed = { "lua_ls", "pyright", "ts_ls" }
+      ensure_installed = { "lua_ls", "pyright", "ts_ls", "rust_analyzer", "gopls" }
     }
   },
   {
@@ -69,9 +69,63 @@ return {
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
       })
 
+      vim.lsp.config("rust_analyzer", {
+        settings = {
+          ["rust-analyzer"] = {
+            inlayHints = {
+              bindingModeHints = { enable = true },
+              chainingHints = { enable = true },
+              closureReturnTypeHints = { enable = "always" },
+              parameterHints = { enable = true },
+              typeHints = { enable = true },
+            },
+          }
+        }
+      })
+
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            staticcheck = true,
+            usePlaceholders = true,
+            analyses = { unusedparams = true },
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+          },
+        },
+      })
+
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client:supports_method("textDocument/inlayHint") then
+            vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+          end
+        end,
+      })
+
       -- Enable all three servers
-      vim.lsp.enable({ "lua_ls", "pyright", "ts_ls" })
+      vim.lsp.enable({ "lua_ls", "pyright", "ts_ls", "rust_analyzer", "gopls" })
     end,
+  },
+  {
+    "obsidian-nvim/obsidian.nvim",
+    version = "*",
+    ft = "markdown",
+    cond = function()
+      return vim.fn.isdirectory(vim.fn.expand("~/Documents/Obsidian-noter")) == 1
+    end,
+    opts = {
+      legacy_commands = false,
+      workspaces = {
+        { name = "personal", path = "~/vaults/personal" },
+      },
+    },
   },
   {
     "lewis6991/gitsigns.nvim"
@@ -116,7 +170,7 @@ return {
   {
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
-    dependencies = { 'rafamadriz/friendly-snippets' },
+    dependencies = { 'rafamadriz/friendly-snippets', 'giuxtaposition/blink-cmp-copilot' },
 
     -- use a release tag to download pre-built binaries
     version = '1.*',
@@ -154,7 +208,15 @@ return {
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+        default = { 'lsp', 'path', 'snippets', 'buffer', 'copilot' },
+        providers = {
+          copilot = {
+            name = "copilot",
+            module = "blink-cmp-copilot",
+            score_offset = 100,
+            async = true,
+          }
+        }
       },
 
       -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
@@ -198,12 +260,69 @@ return {
       require("mason-tool-installer").setup({
         ensure_installed = {
           "eslint_d",
-          -- This is perfect for adding other tools later, like:
           "prettier",
-          -- "stylua",
+          "goimports",
+          "gofumpt",
         },
       })
     end,
+  },
+  {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons'
+  },
+  {
+    "folke/trouble.nvim",
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false }, -- disabled: blink.cmp will handle completion display instead
+        panel = { enabled = false },      -- disabled: same reason
+      })
+    end,
+  },
+  {
+    "giuxtaposition/blink-cmp-copilot",
+    dependencies = { "zbirenbaum/copilot.lua" },
   },
   {
     "stevearc/conform.nvim",
@@ -233,4 +352,14 @@ return {
       },
     },
   },
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  }, {
+  "lukas-reineke/indent-blankline.nvim",
+  main = "ibl",
+  ---@module "ibl"
+  ---@type ibl.config
+  opts = {},
+}
 }
