@@ -1,3 +1,5 @@
+require("user.clipboard")
+
 -- Define the leader shortcuts.
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
