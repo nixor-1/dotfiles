@@ -24,7 +24,7 @@ return {
 
     config = function()
       -- Her installerer vi selve sprogene [cite: 76, 176]
-      local parsers = { "lua", "bash", "python", "javascript", "typescript", "tsx" }
+      local parsers = { "lua", "bash", "python", "javascript", "typescript", "tsx", "go", "gomod", "gosum", "gowork" }
       require('nvim-treesitter').install(parsers)
     end,
   },
@@ -45,7 +45,7 @@ return {
   {
     "williamboman/mason-lspconfig.nvim",
     opts = {
-      ensure_installed = { "lua_ls", "pyright", "ts_ls", "rust_analyzer" }
+      ensure_installed = { "lua_ls", "pyright", "ts_ls", "rust_analyzer", "gopls" }
     }
   },
   {
@@ -83,6 +83,23 @@ return {
         }
       })
 
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            staticcheck = true,
+            usePlaceholders = true,
+            analyses = { unusedparams = true },
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+          },
+        },
+      })
+
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -93,8 +110,22 @@ return {
       })
 
       -- Enable all three servers
-      vim.lsp.enable({ "lua_ls", "pyright", "ts_ls" })
+      vim.lsp.enable({ "lua_ls", "pyright", "ts_ls", "rust_analyzer", "gopls" })
     end,
+  },
+  {
+    "obsidian-nvim/obsidian.nvim",
+    version = "*",
+    ft = "markdown",
+    cond = function()
+      return vim.fn.isdirectory(vim.fn.expand("~/Documents/Obsidian-noter")) == 1
+    end,
+    opts = {
+      legacy_commands = false,
+      workspaces = {
+        { name = "personal", path = "~/vaults/personal" },
+      },
+    },
   },
   {
     "lewis6991/gitsigns.nvim"
@@ -229,9 +260,9 @@ return {
       require("mason-tool-installer").setup({
         ensure_installed = {
           "eslint_d",
-          -- This is perfect for adding other tools later, like:
           "prettier",
-          -- "stylua",
+          "goimports",
+          "gofumpt",
         },
       })
     end,
@@ -321,4 +352,14 @@ return {
       },
     },
   },
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  }, {
+  "lukas-reineke/indent-blankline.nvim",
+  main = "ibl",
+  ---@module "ibl"
+  ---@type ibl.config
+  opts = {},
+}
 }
