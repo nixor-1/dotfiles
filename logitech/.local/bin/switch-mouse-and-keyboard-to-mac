@@ -1,0 +1,3 @@
+#!/bin/sh
+solaar config "MX Master 4 for Mac" change-host 1
+solaar config "MX Mechanical Mini" change-host 1

@@ -2,6 +2,8 @@
 # ~/.bashrc
 #
 
+export PATH="$HOME/.config/hypr/scripts:$PATH"
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

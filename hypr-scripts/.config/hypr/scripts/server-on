@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+CONFIG_DIR="$HOME/.config/hypr/scripts/logind-config-files"
+
+if [ ! -f "$CONFIG_DIR/logind.conf.server" ]; then
+    echo "Error: Server config file not found."
+    exit 1
+fi
+
+sudo cp "$CONFIG_DIR/logind.conf.server" /etc/systemd/logind.conf
+
+# Optional: Disable hypridle if running so the screen/system doesn't lock/sleep locally
+systemctl --user stop hypridle.service 2>/dev/null
+
+echo "󰒋 Server mode activated: Laptop will stay awake on lid close."

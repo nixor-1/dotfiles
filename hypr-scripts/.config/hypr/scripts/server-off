@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+CONFIG_DIR="$HOME/.config/hypr/scripts/logind-config-files"
+
+if [ ! -f "$CONFIG_DIR/logind.conf.normal" ]; then
+    echo "Error: Normal config file not found."
+    exit 1
+fi
+
+sudo cp "$CONFIG_DIR/logind.conf.normal" /etc/systemd/logind.conf
+
+# Optional: Restart hypridle for normal desktop idle handling
+systemctl --user start hypridle.service 2>/dev/null
+
+echo " Normal mode activated: Laptop will sleep on lid close."
